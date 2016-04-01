@@ -6,13 +6,16 @@ include ksamd64.inc
 
 	
 	NESTED_ENTRY CfgHookProc, TEXT
+	.ENDPROLOG
+	
+	;GENERATE_EXCEPTION_FRAME Rbp
+	
 
-	
-	GENERATE_EXCEPTION_FRAME Rbp
-	
+
+
 	call CfgHook
 		
-	RESTORE_EXCEPTION_STATE Rbp
+	;RESTORE_EXCEPTION_STATE Rbp
 
 
 	

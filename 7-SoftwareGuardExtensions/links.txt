@@ -1,0 +1,2 @@
+SDK: https://software.intel.com/en-us/sgx-sdk
+Alex Ionescu: http://www.alex-ionescu.com/Enclave%20Support%20In%20Windows%2010%20Fall%20Update.pdf

@@ -169,8 +169,7 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="instcallback.asm">
-      <FileType>Document</FileType>
+    <MASM Include="hook.asm">
     </MASM>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

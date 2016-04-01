@@ -9,13 +9,21 @@
 void RaiseError(TCHAR* Reason)
 {
 	DWORD le = GetLastError();
-	_tprintf(_T("%s raised error: %d"), Reason, le);
+	_tprintf(_T("! %s raised error: %d"), Reason, le);
 	TerminateProcess(GetCurrentProcess(), le);
 }
 
-int main()
+int main(int argc, const char* argv[] )
 {
-	char*	pathtotool = "C:\\users\\marti\\Documents\\Visual StudiO 2015\\Projects\\cfghookdll\\x64\\Debug\\cfghookdll.dll";
+
+	if (argc != 2) {
+
+		printf("Usage:\n");
+		printf("injector.exe  tool_to_inject \n");
+		return 1;
+	}
+	
+	const char*	pathtotool = argv[1];
 	TCHAR*  process = _T("C:\\windows\\system32\\notepad.exe");
 
 	STARTUPINFO si;
@@ -52,8 +60,18 @@ int main()
 
 
 	WaitForSingleObject(hThread, INFINITE);
-	CloseHandle(hThread);
+	
+	DWORD exitcode;
+	if (GetExitCodeThread(hThread, &exitcode)) {
 
+		if (exitcode == 0) {
+			printf("! Cannot load %s into remote process.\n", pathtotool);
+			return 2;
+		}
+
+	}
+
+	CloseHandle(hThread);
 
 
 	// run process

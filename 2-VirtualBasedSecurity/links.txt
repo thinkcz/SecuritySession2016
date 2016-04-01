@@ -1,0 +1,1 @@
+* How to enable VBS: http://deploymentresearch.com/Research/Post/490/Enabling-Virtual-Secure-Mode-VSM-in-Windows-10-Enterprise-Build-10130

@@ -1,0 +1,1 @@
+analysis: http://www.codeproject.com/Articles/543542/Windows-x-system-service-hooks-and-advanced-debu (but valid only for windows 7)

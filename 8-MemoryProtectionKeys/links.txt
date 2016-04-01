@@ -1,0 +1,2 @@
+* See Intel Architecture manual "4.6.2 Protection Keys"
+* https://www.phoronix.com/scan.php?page=news_item&px=Intel-LLVM-PKU

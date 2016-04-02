@@ -46,27 +46,12 @@ typedef NTSTATUS(NTAPI *pfnLdrUnregisterDllNotification)(void *Cookie);
 #define LDR_DLL_NOTIFICATION_REASON_UNLOADED 2  
 
 
-extern "C" void __fastcall CfgHookProc();
-
-
-HANDLE ghMutex = 0;
-BOOL bHookDLL = false;
-
-
 extern "C" void  CfgHook(void* addr)
 {
 	static bool breentrant = false;
 
-
-
 	if (!breentrant) {
 		breentrant = true;
-
-//		DWORD dwWaitResult = WaitForSingleObject(
-			//ghMutex,    // handle to mutex
-			//INFINITE);  // no time-out interval
-			
-		
 
 		char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME] = { 0 };
 		PIMAGEHLP_SYMBOL pimgsym = (PIMAGEHLP_SYMBOL)buffer;
@@ -85,17 +70,9 @@ extern "C" void  CfgHook(void* addr)
 			printf("call to %p \n", addr);
 		}
 
-
-//		ReleaseMutex(ghMutex);
-
-
 		breentrant = false;
 	}
 	
-
-
-
-
 }
 
 
@@ -107,7 +84,9 @@ void LoadedDLL(PVOID DllBase, WCHAR* DllName)
 	if (pnth->OptionalHeader.DllCharacteristics & IMAGE_DLLCHARACTERISTICS_GUARD_CF)
 	{
 		ULONG size;
+		
 		PIMAGE_LOAD_CONFIG_DIRECTORY loadconfig;
+		
 		DWORD old = 0;
 
 		printf("Dll Loaded with CFG: %p at %S \n", DllBase, DllName);
@@ -115,7 +94,9 @@ void LoadedDLL(PVOID DllBase, WCHAR* DllName)
 		loadconfig = (PIMAGE_LOAD_CONFIG_DIRECTORY)ImageDirectoryEntryToData(DllBase, TRUE, IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG, &size);
 
 		VirtualProtect((PVOID)loadconfig->GuardCFCheckFunctionPointer, sizeof(PVOID), PAGE_READWRITE, &old);
+		
 		*(PVOID*)loadconfig->GuardCFCheckFunctionPointer = (PVOID)(ULONG_PTR)CfgHook;
+		
 		VirtualProtect((PVOID)loadconfig->GuardCFCheckFunctionPointer, sizeof(PVOID), old, NULL);
 
 	}
@@ -125,12 +106,6 @@ void LoadedDLL(PVOID DllBase, WCHAR* DllName)
 
 	
 }
-
-
-
-
-
-
 
 VOID NTAPI MyLdrDllNotification(
 	ULONG NotificationReason,
@@ -162,8 +137,6 @@ void EntryPoint(void* ctx)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED);
 	}
 	
-
-	ghMutex = CreateMutex(NULL, FALSE, NULL);
 
 
 	// symbols resolving

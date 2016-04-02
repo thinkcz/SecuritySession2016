@@ -73,17 +73,12 @@ int main(int argc, const char* argv[] )
 
 	CloseHandle(hThread);
 
-
 	// run process
 	ResumeThread(pi.hThread);
 
 
-	
 	WaitForSingleObject(pi.hProcess, INFINITE);
 
-
-	
-
-    return 0;
+	return 0;
 }
 
